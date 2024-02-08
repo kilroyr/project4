@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Homepage from "./pages/MainPage/HomePage";
+import Homepage from "./pages/HomePage/HomePage";
 
 function App() {
   const [count, setCount] = useState(0);
