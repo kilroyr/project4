@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { signUp } from "../../utilities/usersService";
+import "../../index.css";
 
 
 class SignUpForm extends Component {

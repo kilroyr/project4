@@ -1,10 +1,10 @@
-import LoginForm from "../../components/Auth_LoginForm/LoginForm"
-import NavbarOut from "../../components/Navbar/NavbarOut/NavbarOut";
+import LoginForm from "../../components/LoginForm/LoginForm"
+import NavBar from "../../components/NavBar/NavBar";
 
 export default function AuthPage( { setUser } ) {
   return (
     <>
-      <NavbarOut />
+      <NavBar />
       <LoginForm setUser={setUser} />
     </>
   );
