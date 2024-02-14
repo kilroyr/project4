@@ -12,9 +12,8 @@ export default function LoginForm({ setUser }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(e);
     try {
-      const user = await login({ email, password });
+      const user = await logIn({ email, password });
       if (user.token) {
         console.log(user);
         setError("");
