@@ -1,43 +1,45 @@
-import * as usersAPI from "./usersAPI";
+// usersService.js
 
-export async function signUp(userData) {
+import bcrypt from 'bcrypt';
+import * as usersAPI from './usersAPI';
 
-  const token = await usersAPI.signUp(userData);
-  localStorage.setItem("token", token);
+export async function signup(userData) {
 
-  return getUser();
-}
-
-export function getUser() {
-  const token = getToken();
-  return token ? JSON.parse(atob(token.split(".")[1])).user : null;
-}
-
-export function getToken() {
-  const token = localStorage.getItem("token");
-
-  if (!token) return null;
-
-  const payload = JSON.parse(atob(token.split(".")[1]));
-
-
-  if (payload.exp < Date.now() / 1000) {
-    localStorage.removeItem("token");
-    return null;
+  // Validate user data  
+  const errors = validateSignup(userData);
+  if (errors.length > 0) {
+    throw errors;
   }
-  return token;
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+  // Create user
+  const user = await usersAPI.createUser({
+    ...userData, 
+    password: hashedPassword
+  });
+
+  return user;
+
 }
 
-export function logOut() {
-  localStorage.removeItem("token");
+function validateSignup(userData) {
+  const errors = [];
+  // TODO: Add validation logic
+  return errors;
 }
 
-export async function logIn(credentials) {
-  const token = await usersAPI.logIn(credentials);
-  localStorage.setItem("token", token);
-  return getUser();
-}
 
-export function checkToken() {
-  return usersAPI.checkToken().then((dateStr) => new Date(dateStr));
+export async function login(credentials) {
+  
+  const user = await usersAPI.getUserByEmail(credentials.email);
+
+  // Validate user exists and compare passwords
+  if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
+    throw 'Invalid email or password';
+  }
+
+  // TODO: Create and return JWT token
+
 }

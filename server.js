@@ -1,28 +1,38 @@
-//* require block
-require("dotenv").config();
-require("./config/database");
+// Require modules
+const express = require('express');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const { body } = require('express-validator');
 
-const express = require("express");
-const path = require("path");
-const logger = require("morgan");
-
-//* router requires
-const usersRouter = require("./routes/usersRouter")
-
-
+// Create app 
 const app = express();
 
-//* middleware block
+// Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(morgan('dev')); 
 
-//* Middleware to verify token and assign user object of payload to req.user.
-app.use(require('./config/checkToken'));
-app.use("/api/users", usersRouter);
+// Validation middleware
+app.post( "/api/users",
+  body("email").isEmail().normalizeEmail(),
+  body("password").isLength({ min: 8 })
+);
 
-//* listen block
-const port = process.env.PORT || 3000;
+// Rate limiting, CORS, Helmet, compression, etc
 
-app.listen(port, function () {
-  console.log(`Express app running on port ${port}`);
+// Routes
+app.use('/api/users', require('./routes/users'));
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Server error'); 
 });
+
+// DB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('DB connected'))
+  .catch(err => console.error(err));
+
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
