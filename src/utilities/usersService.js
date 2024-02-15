@@ -1,6 +1,6 @@
 // usersService.js
 
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt'; 
 import * as usersAPI from './usersAPI';
 
 export async function signup(userData) {
@@ -42,4 +42,10 @@ export async function login(credentials) {
 
   // TODO: Create and return JWT token
 
+}
+
+
+
+export function getToken() {
+  return 
 }
