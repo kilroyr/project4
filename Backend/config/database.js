@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const connectDB = async () => {
   try {
     // MongoDB connection URI
-    const uri = "mongodb://localhost:27017/PcPartPicker";
+    const uri = "mongodb://localhost:3000/PcPartPicker";
 
     await mongoose.connect(uri, {
       useNewUrlParser: true,
